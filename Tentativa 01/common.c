@@ -9,9 +9,8 @@ void ERROR(const char *msg) {
     perror(msg);
     exit(1);
 }
-
-static void
-broadcast(const char *mess)
+/*
+static void broadcast(const char *mess)
 {
     struct sockaddr_in s;
 
@@ -27,3 +26,5 @@ broadcast(const char *mess)
     if(sendto(broadcastSock, mess, strlen(mess), 0, (struct sockaddr *)&s, sizeof(struct sockaddr_in)) < 0)
         perror("sendto");
 }
+
+*/

@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
     serv_addr.sin_port = htons(portno);
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR on binding");
+
     listen(sockfd, 5);
     clilen = sizeof(cli_addr);
     //Below code is modified to handle multiple clients using fork
@@ -58,6 +59,7 @@ int main(int argc, char *argv[]) {
             if (n < 0)
                 error("ERROR reading from socket");
             printf("Here is the message: %s\n", buffer);
+            printf("teste da testa: %d\n", newsockfd);
             if (strcmp(buffer, "close connection\n") == 0 || strcmp(buffer, "close connection") == 0)
             {
                 n = write(newsockfd, "Successful removal", 18);
