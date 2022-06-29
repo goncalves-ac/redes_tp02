@@ -9,6 +9,28 @@ void ERROR(const char *msg) {
     perror(msg);
     exit(1);
 }
+
+void req_add() {
+    printf("01");
+}
+
+char* getMessageId(char* string) {
+    return strtok(string, " ");
+}
+
+int getEquipmentId(char* string) {
+    char * token = strtok(string, " ");
+    int id = -1;
+    while( token != NULL ) {
+        if( token != NULL) {
+            id = atoi(token);
+        }
+        token = strtok(NULL, " ");
+    }
+
+    return id;
+}
+
 /*
 static void broadcast(const char *mess)
 {

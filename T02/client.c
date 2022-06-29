@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
   }
 
   //creating a new thread for receiving messages from the server
-   read = pthread_create(&pthread, NULL, receiveMessage, (void *) sock);
+   read = pthread_create(&rthread, NULL, receiveMessage, (void *) sock);
    if (read < 0)
    {
        printf("ERROR: Return Code from pthread_create() is %d\n", read);
