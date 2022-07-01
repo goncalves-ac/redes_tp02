@@ -5,7 +5,7 @@
 
 #include <arpa/inet.h>
 
-void logExit(const char *msg) {
+void logexit(const char *msg) {
 	perror(msg);
 	exit(EXIT_FAILURE);
 }
@@ -54,7 +54,7 @@ void addrtostr(const struct sockaddr *addr, char *str, size_t strsize) {
         struct sockaddr_in *addr4 = (struct sockaddr_in *)addr;
         if (!inet_ntop(AF_INET, &(addr4->sin_addr), addrstr,
                        INET6_ADDRSTRLEN + 1)) {
-            logExit("ntop");
+            logexit("ntop");
         }
         port = ntohs(addr4->sin_port); // network to host short
     } else if (addr->sa_family == AF_INET6) {
@@ -62,11 +62,11 @@ void addrtostr(const struct sockaddr *addr, char *str, size_t strsize) {
         struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *)addr;
         if (!inet_ntop(AF_INET6, &(addr6->sin6_addr), addrstr,
                        INET6_ADDRSTRLEN + 1)) {
-            logExit("ntop");
+            logexit("ntop");
         }
         port = ntohs(addr6->sin6_port); // network to host short
     } else {
-        logExit("unknown protocol family.");
+        logexit("unknown protocol family.");
     }
     if (str) {
         snprintf(str, strsize, "IPv%d %s %hu", version, addrstr, port);
@@ -98,74 +98,3 @@ int server_sockaddr_init(const char *proto, const char *portstr,
         return -1;
     }
 }
-
-void req_add() {
-    printf("01");
-}
-
-char* getMessageId(char* string) {
-    return strtok(string, " ");
-}
-
-int getLastMessageId(char* string) {
-    char * token = strtok(string, " ");
-    int id = -1;
-    while( token != NULL ) {
-        if( token != NULL) {
-            id = atoi(token);
-        }
-        token = strtok(NULL, " ");
-    }
-
-    return id;
-}
-
-void printDataValue(char* string) {
-    char * token = strtok(string, " ");
-    char id[20];
-    while( token != NULL ) {
-        if( token != NULL) {
-            sprintf(id, "%s", token);
-        }
-        token = strtok(NULL, " ");
-    }
-
-    printf("%s\n", id);
-}
-
-int getTargetId(char* string) {
-    char * token = strtok(string, " ");
-    int id = -1;
-    int count = 1;
-    while( token != NULL ) {
-        if( token != NULL && count == 3) {
-            id = atoi(token);
-        }
-        token = strtok(NULL, " ");
-        count++;
-    }
-
-    return id;
-}
-
-int getEquipmentIdWithPayload(char* string) {
-    char * token = strtok(string, " ");
-    int id = -1;
-    int count = 1;
-    while( token != NULL ) {
-        if( token != NULL && count == 2) {
-            id = atoi(token);
-        }
-        token = strtok(NULL, " ");
-        count++;
-    }
-
-    return id;
-}
-
-// Gera números aleatórios considerando duas casas decimais
-float rand_float(int min, int max) {
-    float scale = rand() / (float)RAND_MAX;
-    return min + scale * (max - min);
-}
-

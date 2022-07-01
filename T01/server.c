@@ -79,7 +79,9 @@ int main(int argc, char *argv[]) {
             {
                 countID--;
                 n = write(newsockfd, "Successful removal", 18);
-            } if (strcmp(buffer, "01\n") == 0 || strcmp(buffer, "01") == 0)
+            } 
+            
+            if (strcmp(buffer, "01\n") == 0 || strcmp(buffer, "01") == 0)
             {
 
                 for (int i = 0; i < 15; i++)
