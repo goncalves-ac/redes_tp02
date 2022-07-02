@@ -220,7 +220,7 @@ int main(int argc, char *argv[]) {
     //printf("bound to %s, waiting connections\n", addrstr);
 
     while (1) {
-        struct sockaddr_storage cstorage;  Client socket address storage
+        struct sockaddr_storage cstorage;  // Client socket address storage
         struct sockaddr *caddr = (struct sockaddr *)(&cstorage); 
         socklen_t caddrlen = sizeof(cstorage); 
 
