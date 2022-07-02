@@ -1,3 +1,6 @@
+//
+// Created by thimorais
+//
 #pragma once
 
 #include <stdlib.h>
@@ -5,6 +8,7 @@
 
 #define BUFSIZE 1024
 #define CLIENTS 15
+
 
 struct client_data { // client data structure
     int csock; // client socket
@@ -17,26 +21,40 @@ struct equipment_data { // equipment
     int equipment_used; // equipment is used is 1, not used is -1
 };
 
-void logExit(const char *msg); // log message and exit
+struct equipment_data equipment[CLIENTS];
 
-int addrparse(const char *addrstr, const char *portstr, struct sockaddr_storage *storage); // parse address and port
+int equipment_client[CLIENTS];
 
-void addrtostr(const struct sockaddr *addr, char *str, size_t strsize); // convert address to string
+int countEquipment;
 
-int server_sockaddr_init(const char *proto, const char *portstr, struct sockaddr_storage *storage); // init server address
+pthread_mutex_t lock;
 
-void req_add(); // add requester
 
-char* getMessageId(char* string); // get message id from string
+void clientUsage(int argc, char **argv);
 
-int getEquipmentIdWithPayload(char* string); // get equipment id with payload from string
+void serverUsage(int argc, char **argv);
 
-int getLastMessageId(char* string); // get last message id from string
+void logExit(const char *msg);
 
-int getTargetId(char* string); // get target id from string
+int addrparse(const char *addrstr, const char *portstr, struct sockaddr_storage *storage);
 
-void printDataValue(char* string); // print data value from string
+void addrtostr(const struct sockaddr *addr, char *str, size_t strsize);
 
-float rand_float(int min, int max); // generate random float
+int server_sockaddr_init(const char *proto, const char *portstr, struct sockaddr_storage *storage);
 
-void send_message_to_all(char *string, int unique_id, struct equipment_data *equipment, pthread_mutex_t lock); // send message to all clients
+char *recuperarIdMensagem(char *string);
+
+int getEquipmentIdWithPayload(char *string); // get equipment id with payload from string
+
+int getLastMessageId(char *string); // get last message id from string
+
+int getTargetId(char *string); // get target id from string
+
+void printDataValue(char *string); // print data value from string
+
+float geradorLeituraAleatoria(int min, int max); // generate random float
+
+void broadcast(char *string, int unique_id, struct equipment_data *equipment,
+               pthread_mutex_t lock); // send message to all clients
+
+void *client_thread(void *data);

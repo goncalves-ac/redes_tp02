@@ -1,20 +1,24 @@
-FROM gcc:latest
+#FROM gcc:latest
+FROM ubuntu:trusty
 
 COPY . /src
 
 WORKDIR /src
 
-#RUN make
+RUN apt-get update; apt-get upgrade -y
+
+RUN apt-get install -y build-essential
+
+#RUN apt-get install make -y
+
+RUN make
 
 # CMD ["make", "/bin/bash"]
 
-# FROM ubuntu:trusty
 
 # WORKDIR /src
 
-# RUN apt-get update; apt-get upgrade -y
 #RUN apt-get upgrade -y
-# RUN apt-get install -y build-essential
 # RUN apt-get install -y linux-headers-generic
 #RUN apt-get install -y glibc-dev
 # RUN apt-get install -y vim exuberant-ctags
