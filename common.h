@@ -54,6 +54,6 @@ void printDataValue(char *string);
 
 float geradorLeituraAleatoria(int min, int max);
 
-void broadcast(char *string, int unique_id, struct dadosEquipamento *equipment, pthread_mutex_t lock);
+void broadcast(char *string, int unique_id, struct dadosEquipamento *equipamento, pthread_mutex_t lock);
 
 void *client_thread(void *data);

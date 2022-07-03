@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
     char dataBuf[BUFSIZE];
     unsigned totalBytes = 0;
     size_t count;
-    int equipment_id = -1;
+    int idEquipamento = -1;
 
     if (argc < 3) {
         clientUsage(argc, argv);
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
         addrtostr(addr, addrstr, BUFSIZE);
         totalBytes = 0;
 
-        if (equipment_id == -1) {
+        if (idEquipamento == -1) {
             memset(buf, 0, BUFSIZE);
             sprintf(buf, "01");
             count = send(s, buf, strlen(buf) + 1, 0);
@@ -59,16 +59,16 @@ int main(int argc, char **argv) {
             sprintf(auxBuf, "%s", buf);
             if (strcmp(buf, "close connection\n") == 0 || strcmp(buf, "close connection") == 0) {
                 memset(buf, 0, BUFSIZE);
-                sprintf(buf, "02 %d", equipment_id);
+                sprintf(buf, "02 %d", idEquipamento);
                 count = send(s, buf, strlen(buf) + 1, 0);
             } else if (strcmp(buf, "list equipment\n") == 0 || strcmp(buf, "list equipment") == 0) {
                 memset(buf, 0, BUFSIZE);
-                sprintf(buf, "09 %d", equipment_id);
+                sprintf(buf, "09 %d", idEquipamento);
                 count = send(s, buf, strlen(buf) + 1, 0);
             } else if (strstr(buf, "request information from")) {
                 int target_equipment = recuperarIdUltimaMensagem(auxBuf);
                 memset(buf, 0, BUFSIZE);
-                sprintf(buf, "05 %d %d", equipment_id, target_equipment);
+                sprintf(buf, "05 %d %d", idEquipamento, target_equipment);
                 count = send(s, buf, strlen(buf) + 1, 0);
             }
         }
@@ -84,13 +84,13 @@ int main(int argc, char **argv) {
         sprintf(payloadBuf, "%s", buf);
         sprintf(dataBuf, "%s", buf);
         if (strcmp(recuperarIdMensagem(buf), "03") == 0) {
-            if (equipment_id == -1) {
-                equipment_id = recuperarIdUltimaMensagem(auxBuf);
-                vetorIntEquipamentos[equipment_id] = 0;
-                if (equipment_id < 10) {
-                    printf("New ID: 0%d\n", equipment_id + 1);
+            if (idEquipamento == -1) {
+                idEquipamento = recuperarIdUltimaMensagem(auxBuf);
+                vetorIntEquipamentos[idEquipamento] = 0;
+                if (idEquipamento < 10) {
+                    printf("New ID: 0%d\n", idEquipamento + 1);
                 } else {
-                    printf("New ID: %d\n", equipment_id + 1);
+                    printf("New ID: %d\n", idEquipamento + 1);
                 }
             } else {
                 int aux_equipment_id = recuperarIdUltimaMensagem(auxBuf);
@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
         } else if (strcmp(recuperarIdMensagem(buf), "06") == 0) {
             int sourceId = recuperarIdEquipamentoDestino(auxBuf);
             int targetId = recuperarIdDestino(payloadBuf);
-            if (sourceId - 1 == equipment_id) {
+            if (sourceId - 1 == idEquipamento) {
                 printf("requested information\n");
             } else {
                 if (targetId < 10) {
@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
             }
         } else if (strcmp(recuperarIdMensagem(buf), "08") == 0) {
             int aux_equipment_id = recuperarIdEquipamentoDestino(auxBuf);
-            if (aux_equipment_id == equipment_id) {
+            if (aux_equipment_id == idEquipamento) {
                 printf("Successful removal\n");
                 bzero(buf, 256);
                 bzero(auxBuf, 256);

@@ -18,8 +18,7 @@ void logExit(const char *msg) {
     exit(EXIT_FAILURE);
 }
 
-int addrparse(const char *addrstr, const char *portstr,
-              struct sockaddr_storage *storage) {
+int addrparse(const char *addrstr, const char *portstr, struct sockaddr_storage *storage) {
     if (addrstr == NULL || portstr == NULL) {
         return -1;
     }
@@ -178,16 +177,16 @@ float geradorLeituraAleatoria(int min, int max) {
     return min + scale * (max - min);
 }
 
-void broadcast(char *string, int unique_id, struct dadosEquipamento *equipment, pthread_mutex_t lock) {
+void broadcast(char *string, int unique_id, struct dadosEquipamento *equipamento, pthread_mutex_t lock) {
     pthread_mutex_lock(&lock);
     int i;
     for (i = 0; i < MAXEQUIPAMENTO; ++i) {
-        if (equipment[i].equipamento_usado != -1) {
-            if (equipment[i].eq_sock != unique_id) {
+        if (equipamento[i].equipamento_usado != -1) {
+            if (equipamento[i].eq_sock != unique_id) {
                 char aux[100];
                 sprintf(aux, "%s", string);
                 memccpy(string, aux, '\0', 100);
-                int id = equipment[i].eq_sock;
+                int id = equipamento[i].eq_sock;
                 size_t count = write(id, string, strlen(string) + 1);
 
                 if (count < 0) {
