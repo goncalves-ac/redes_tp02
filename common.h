@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 
 #define BUFSIZE 1024
-#define MAXEQUIPMENT 15
+#define MAXEQUIPAMENTO 15
 
 
 struct client_data {
@@ -21,9 +21,9 @@ struct equipment_data {
     int equipment_used;
 };
 
-struct equipment_data equipment[MAXEQUIPMENT];
+struct equipment_data equipment[MAXEQUIPAMENTO];
 
-int equipment_client[MAXEQUIPMENT];
+int equipment_client[MAXEQUIPAMENTO];
 
 int countEquipment;
 

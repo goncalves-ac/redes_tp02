@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     }
 
     int i;
-    for (i = 0; i < MAXEQUIPMENT; i++) {
+    for (i = 0; i < MAXEQUIPAMENTO; i++) {
         equipment_client[i] = -1;
     }
 
