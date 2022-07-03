@@ -16,12 +16,12 @@ struct client_data {
 
 };
 
-struct equipment_data {
+struct dadosEquipamento {
     int eq_sock;
     int equipment_used;
 };
 
-struct equipment_data equipment[MAXEQUIPAMENTO];
+struct dadosEquipamento vetorStructEquipamentos[MAXEQUIPAMENTO];
 
 int equipment_client[MAXEQUIPAMENTO];
 
@@ -54,6 +54,6 @@ void printDataValue(char *string);
 
 float geradorLeituraAleatoria(int min, int max);
 
-void broadcast(char *string, int unique_id, struct equipment_data *equipment, pthread_mutex_t lock);
+void broadcast(char *string, int unique_id, struct dadosEquipamento *equipment, pthread_mutex_t lock);
 
 void *client_thread(void *data);

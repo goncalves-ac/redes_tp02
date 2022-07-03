@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
 
     int i;
     for (i = 0; i < MAXEQUIPAMENTO; i++) {
-        equipment[i].equipment_used = -1;
-        equipment[i].eq_sock = -1;
+        vetorStructEquipamentos[i].equipment_used = -1;
+        vetorStructEquipamentos[i].eq_sock = -1;
     }
 
     if (pthread_mutex_init(&lock, NULL) != 0) {
