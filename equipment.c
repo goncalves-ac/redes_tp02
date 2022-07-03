@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
                 sprintf(buf, "09 %d", equipment_id);
                 count = send(s, buf, strlen(buf) + 1, 0);
             } else if (strstr(buf, "request information from")) {
-                int target_equipment = getLastMessageId(auxBuf);
+                int target_equipment = recuperarIdUltimaMensagem(auxBuf);
                 memset(buf, 0, BUFSIZE); // clear the buffer
                 sprintf(buf, "05 %d %d", equipment_id, target_equipment);
                 count = send(s, buf, strlen(buf) + 1, 0);
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
         if (strcmp(recuperarIdMensagem(buf), "03") == 0) // return from add request to server
         {
             if (equipment_id == -1) {
-                equipment_id = getLastMessageId(auxBuf);
+                equipment_id = recuperarIdUltimaMensagem(auxBuf);
                 equipment_client[equipment_id] = 0;
                 if (equipment_id < 10) {
                     printf("New ID: 0%d\n", equipment_id + 1);
@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
                     printf("New ID: %d\n", equipment_id + 1);
                 }
             } else {
-                int aux_equipment_id = getLastMessageId(auxBuf);
+                int aux_equipment_id = recuperarIdUltimaMensagem(auxBuf);
                 equipment_client[aux_equipment_id] = 1;
                 if (aux_equipment_id < 10) {
                     printf("Equipment 0%d added\n", aux_equipment_id + 1);
@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
         } else if (strcmp(recuperarIdMensagem(buf), "07") == 0) // message about some error in the request
         {
             //int equipmentId = recuperarIdEquipamentoDestino(auxBuf);
-            int payload = getLastMessageId(payloadBuf);
+            int payload = recuperarIdUltimaMensagem(payloadBuf);
 
             if (payload == 1) {
                 printf("Equipment not found\n");
@@ -153,7 +153,6 @@ int main(int argc, char **argv) {
         } else if (strcmp(recuperarIdMensagem(buf), "08") == 0) // server exit successful
         {
             int aux_equipment_id = recuperarIdEquipamentoDestino(auxBuf);
-            //int payload = getLastMessageId(payloadBuf);
             if (aux_equipment_id == equipment_id) {
                 printf("Successful removal\n");
                 bzero(buf, 256);

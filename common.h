@@ -46,7 +46,7 @@ char *recuperarIdMensagem(char *string);
 
 int recuperarIdEquipamentoDestino(char *string); // get equipment id with payload from string
 
-int getLastMessageId(char *string); // get last message id from string
+int recuperarIdUltimaMensagem(char *string); // get last message id from string
 
 int getTargetId(char *string); // get target id from string
 

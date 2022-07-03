@@ -124,7 +124,7 @@ char *recuperarIdMensagem(char *string) {
     return strtok(string, " ");
 }
 
-int getLastMessageId(char *string) {
+int recuperarIdUltimaMensagem(char *string) {
     // return the last message id from to print the message
     char *token = strtok(string, " "); // get the first token, this case id of the message
     int id = -1;
@@ -270,7 +270,7 @@ void *client_thread(void *data) {
     {
 
         countEquipment--;
-        int equipment_id = getLastMessageId(auxBuf);
+        int equipment_id = recuperarIdUltimaMensagem(auxBuf);
         sprintf(buf, "08 %d 01", equipment_id);
         if (equipment_id < 9) {
             printf("Equipment 0%d removed\n", equipment_id + 1);
@@ -289,7 +289,7 @@ void *client_thread(void *data) {
                0) // Equipment requests information about some equipment in database and server response.
     {
         int auxSource = recuperarIdEquipamentoDestino(auxBuf);
-        int auxTarget = getLastMessageId(payloadBuf);
+        int auxTarget = recuperarIdUltimaMensagem(payloadBuf);
         if ((auxSource - 1) >= CLIENTS || equipment[auxSource - 1].equipment_used == -1) {
             count = send(cdata->csock, "07 15 02", strlen("07 15 02") + 1, 0); // Equipment is not in database.
             if (auxSource < 10) {
@@ -316,7 +316,7 @@ void *client_thread(void *data) {
     } else if (strcmp(recuperarIdMensagem(buf), "09") ==
                0) // code created to return the equipment list to the requesting equipment
     {
-        int equipment_id = getLastMessageId(auxBuf); //equipment_id is the equipment that requested the list
+        int equipment_id = recuperarIdUltimaMensagem(auxBuf); //equipment_id is the equipment that requested the list
         bzero(buf, 256);
         int i;
         for (i = 0; i < CLIENTS; i++) {
