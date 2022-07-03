@@ -93,12 +93,12 @@ int main(int argc, char **argv) {
                     printf("New ID: %d\n", idEquipamento + 1);
                 }
             } else {
-                int aux_equipment_id = recuperarIdUltimaMensagem(auxBuf);
-                vetorIntEquipamentos[aux_equipment_id] = 1;
-                if (aux_equipment_id < 10) {
-                    printf("Equipment 0%d added\n", aux_equipment_id + 1);
+                int idEqAux = recuperarIdUltimaMensagem(auxBuf);
+                vetorIntEquipamentos[idEqAux] = 1;
+                if (idEqAux < 10) {
+                    printf("Equipment 0%d added\n", idEqAux + 1);
                 } else {
-                    printf("Equipment %d added\n", aux_equipment_id + 1);
+                    printf("Equipment %d added\n", idEqAux + 1);
                 }
             }
 
@@ -137,8 +137,8 @@ int main(int argc, char **argv) {
                 break;
             }
         } else if (strcmp(recuperarIdMensagem(buf), "08") == 0) {
-            int aux_equipment_id = recuperarIdEquipamentoDestino(auxBuf);
-            if (aux_equipment_id == idEquipamento) {
+            int idEqAux = recuperarIdEquipamentoDestino(auxBuf);
+            if (idEqAux == idEquipamento) {
                 printf("Successful removal\n");
                 bzero(buf, 256);
                 bzero(auxBuf, 256);
@@ -146,10 +146,10 @@ int main(int argc, char **argv) {
                 bzero(dataBuf, 256);
                 break;
             } else {
-                if (aux_equipment_id < 10) {
-                    printf("Equipment 0%d removed\n", aux_equipment_id + 1);
+                if (idEqAux < 10) {
+                    printf("Equipment 0%d removed\n", idEqAux + 1);
                 } else {
-                    printf("Equipment %d removed\n", aux_equipment_id + 1);
+                    printf("Equipment %d removed\n", idEqAux + 1);
                 }
             }
         } else {
