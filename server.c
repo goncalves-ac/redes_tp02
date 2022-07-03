@@ -30,31 +30,31 @@ int main(int argc, char *argv[]) {
         serverUsage(argc, argv);
     }
 
-    int s; // Socket descriptor
+    int s;
     s = socket(storage.ss_family, SOCK_STREAM, 0);
     if (s == -1) {
         logExit("socket");
     }
 
-    int enable = 1; // Enable option for setsockopt
+    int enable = 1;
     if (0 != setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int))) {
         logExit("setsockopt");
     }
 
-    struct sockaddr *addr = (struct sockaddr *) (&storage); // Socket address
+    struct sockaddr *addr = (struct sockaddr *) (&storage);
     if (0 != bind(s, addr, sizeof(storage))) {
         logExit("bind");
     }
 
-    if (0 != listen(s, 10)) { // Listen on socket
+    if (0 != listen(s, 10)) {
         logExit("listen");
     }
 
     char addrstr[BUFSIZE];
-    addrtostr(addr, addrstr, BUFSIZE); // Convert address to string
+    addrtostr(addr, addrstr, BUFSIZE);
 
     for (;;) {
-        struct sockaddr_storage cstorage;  // Client socket address storage
+        struct sockaddr_storage cstorage;
         struct sockaddr *caddr = (struct sockaddr *) (&cstorage);
         socklen_t caddrlen = sizeof(cstorage);
 
@@ -68,11 +68,10 @@ int main(int argc, char *argv[]) {
             logExit("malloc");
         }
 
-        cdata->csock = csock; // Save socket descriptor
-        memcpy(&(cdata->storage), &cstorage, sizeof(cstorage)); // Save socket address
+        cdata->csock = csock;
+        memcpy(&(cdata->storage), &cstorage, sizeof(cstorage));
 
-        pthread_t tid; // Thread descriptor
-        pthread_create(&tid, NULL, client_thread, cdata); // Create thread
+        pthread_t tid;
+        pthread_create(&tid, NULL, client_thread, cdata);
     }
-//    exit(EXIT_SUCCESS);
 }

@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     char auxBuf[BUFSIZE];
     char payloadBuf[BUFSIZE];
     char dataBuf[BUFSIZE];
-    unsigned totalBytes = 0; // total bytes received
+    unsigned totalBytes = 0;
     size_t count;
     int equipment_id = -1;
 
@@ -41,49 +41,41 @@ int main(int argc, char **argv) {
             logExit("socket");
         }
 
-        addr = (struct sockaddr *) (&storage); // cast
+        addr = (struct sockaddr *) (&storage);
         if (connect(s, addr, sizeof(storage)) == -1) {
             logExit("connect");
         }
 
         addrtostr(addr, addrstr, BUFSIZE);
-        totalBytes = 0; // total de bytes recebidos
+        totalBytes = 0;
 
-        //send the msg
         if (equipment_id == -1) {
-            memset(buf, 0, BUFSIZE); // clear the buffer
+            memset(buf, 0, BUFSIZE);
             sprintf(buf, "01");
-            count = send(s, buf, strlen(buf) + 1, 0); // the +1 is to \n
-            // send - return the number of bytes sent
+            count = send(s, buf, strlen(buf) + 1, 0);
         } else {
-            memset(buf, 0, BUFSIZE); // clear the buffer
-            //printf(">>> ");
-            fgets(buf, BUFSIZE - 1, stdin); // read the message
+            memset(buf, 0, BUFSIZE);
+            fgets(buf, BUFSIZE - 1, stdin);
             sprintf(auxBuf, "%s", buf);
-            if (strcmp(buf, "close connection\n") == 0 ||
-                strcmp(buf, "close connection") == 0) // request for server output
-            {
-                memset(buf, 0, BUFSIZE); // clear the buffer
+            if (strcmp(buf, "close connection\n") == 0 || strcmp(buf, "close connection") == 0) {
+                memset(buf, 0, BUFSIZE);
                 sprintf(buf, "02 %d", equipment_id);
                 count = send(s, buf, strlen(buf) + 1, 0);
-            } else if (strcmp(buf, "list equipment\n") == 0 ||
-                       strcmp(buf, "list equipment") == 0) // request the list online in the moment
-            {
-                memset(buf, 0, BUFSIZE); // clear the buffer
+            } else if (strcmp(buf, "list equipment\n") == 0 || strcmp(buf, "list equipment") == 0) {
+                memset(buf, 0, BUFSIZE);
                 sprintf(buf, "09 %d", equipment_id);
                 count = send(s, buf, strlen(buf) + 1, 0);
             } else if (strstr(buf, "request information from")) {
                 int target_equipment = recuperarIdUltimaMensagem(auxBuf);
-                memset(buf, 0, BUFSIZE); // clear the buffer
+                memset(buf, 0, BUFSIZE);
                 sprintf(buf, "05 %d %d", equipment_id, target_equipment);
                 count = send(s, buf, strlen(buf) + 1, 0);
             }
         }
 
-        //Receive the message
         memset(buf, 0, BUFSIZE);
-        totalBytes = 0; // total bytes received
-        count = recv(s, buf + totalBytes, BUFSIZE - totalBytes, 0); // receive the message
+        totalBytes = 0;
+        count = recv(s, buf + totalBytes, BUFSIZE - totalBytes, 0);
         totalBytes += count;
         bzero(auxBuf, 256);
         bzero(payloadBuf, 256);
@@ -91,8 +83,7 @@ int main(int argc, char **argv) {
         sprintf(auxBuf, "%s", buf);
         sprintf(payloadBuf, "%s", buf);
         sprintf(dataBuf, "%s", buf);
-        if (strcmp(recuperarIdMensagem(buf), "03") == 0) // return from add request to server
-        {
+        if (strcmp(recuperarIdMensagem(buf), "03") == 0) {
             if (equipment_id == -1) {
                 equipment_id = recuperarIdUltimaMensagem(auxBuf);
                 equipment_client[equipment_id] = 0;
@@ -111,13 +102,11 @@ int main(int argc, char **argv) {
                 }
             }
 
-        } else if (strcmp(recuperarIdMensagem(buf), "04") == 0) // answer of what equipment is online at the moment
-        {
+        } else if (strcmp(recuperarIdMensagem(buf), "04") == 0) {
             if (strlen(auxBuf) > 3) {
                 printf("%s\n", auxBuf + 3);
             }
-        } else if (strcmp(recuperarIdMensagem(buf), "06") == 0) // request the information about some equipment
-        {
+        } else if (strcmp(recuperarIdMensagem(buf), "06") == 0) {
             int sourceId = recuperarIdEquipamentoDestino(auxBuf);
             int targetId = recuperarIdDestino(payloadBuf);
             if (sourceId - 1 == equipment_id) {
@@ -131,11 +120,8 @@ int main(int argc, char **argv) {
                 printDataValue(dataBuf);
             }
 
-        } else if (strcmp(recuperarIdMensagem(buf), "07") == 0) // message about some error in the request
-        {
-            //int equipmentId = recuperarIdEquipamentoDestino(auxBuf);
+        } else if (strcmp(recuperarIdMensagem(buf), "07") == 0) {
             int payload = recuperarIdUltimaMensagem(payloadBuf);
-
             if (payload == 1) {
                 printf("Equipment not found\n");
             } else if (payload == 2) {
@@ -150,8 +136,7 @@ int main(int argc, char **argv) {
                 bzero(dataBuf, 256);
                 break;
             }
-        } else if (strcmp(recuperarIdMensagem(buf), "08") == 0) // server exit successful
-        {
+        } else if (strcmp(recuperarIdMensagem(buf), "08") == 0) {
             int aux_equipment_id = recuperarIdEquipamentoDestino(auxBuf);
             if (aux_equipment_id == equipment_id) {
                 printf("Successful removal\n");
@@ -175,8 +160,6 @@ int main(int argc, char **argv) {
         bzero(payloadBuf, 256);
         bzero(dataBuf, 256);
     }
-
     close(s);
     exit(EXIT_SUCCESS);
-
 }

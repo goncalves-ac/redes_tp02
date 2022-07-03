@@ -10,15 +10,15 @@
 #define CLIENTS 15
 
 
-struct client_data { // client data structure
-    int csock; // client socket
-    struct sockaddr_storage storage; // client address
+struct client_data {
+    int csock;
+    struct sockaddr_storage storage;
 
 };
 
-struct equipment_data { // equipment
-    int eq_sock; // equipment socket
-    int equipment_used; // equipment is used is 1, not used is -1
+struct equipment_data {
+    int eq_sock;
+    int equipment_used;
 };
 
 struct equipment_data equipment[CLIENTS];
@@ -44,17 +44,16 @@ int server_sockaddr_init(const char *proto, const char *portstr, struct sockaddr
 
 char *recuperarIdMensagem(char *string);
 
-int recuperarIdEquipamentoDestino(char *string); // get equipment id with payload from string
+int recuperarIdEquipamentoDestino(char *string);
 
-int recuperarIdUltimaMensagem(char *string); // get last message id from string
+int recuperarIdUltimaMensagem(char *string);
 
-int recuperarIdDestino(char *string); // get target id from string
+int recuperarIdDestino(char *string);
 
-void printDataValue(char *string); // print data value from string
+void printDataValue(char *string);
 
-float geradorLeituraAleatoria(int min, int max); // generate random float
+float geradorLeituraAleatoria(int min, int max);
 
-void broadcast(char *string, int unique_id, struct equipment_data *equipment,
-               pthread_mutex_t lock); // send message to all clients
+void broadcast(char *string, int unique_id, struct equipment_data *equipment, pthread_mutex_t lock);
 
 void *client_thread(void *data);
