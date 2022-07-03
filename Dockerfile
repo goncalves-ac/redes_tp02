@@ -13,6 +13,7 @@ RUN apt-get install -y build-essential
 
 RUN make
 
+# docker build -t tp2 . ; docker rm redes; docker run --name redes -it tp2
 # CMD ["make", "/bin/bash"]
 
 
