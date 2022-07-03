@@ -44,7 +44,7 @@ int server_sockaddr_init(const char *proto, const char *portstr, struct sockaddr
 
 char *recuperarIdMensagem(char *string);
 
-int getEquipmentIdWithPayload(char *string); // get equipment id with payload from string
+int recuperarIdEquipamentoDestino(char *string); // get equipment id with payload from string
 
 int getLastMessageId(char *string); // get last message id from string
 

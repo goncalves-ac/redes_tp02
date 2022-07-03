@@ -169,7 +169,7 @@ int getTargetId(char *string) {
     return id;
 }
 
-int getEquipmentIdWithPayload(char *string) {
+int recuperarIdEquipamentoDestino(char *string) {
     // return the id of the equipment where you need to send the payload
     char *token = strtok(string, " ");
     int id = -1;
@@ -288,7 +288,7 @@ void *client_thread(void *data) {
     } else if (strcmp(recuperarIdMensagem(buf), "05") ==
                0) // Equipment requests information about some equipment in database and server response.
     {
-        int auxSource = getEquipmentIdWithPayload(auxBuf);
+        int auxSource = recuperarIdEquipamentoDestino(auxBuf);
         int auxTarget = getLastMessageId(payloadBuf);
         if ((auxSource - 1) >= CLIENTS || equipment[auxSource - 1].equipment_used == -1) {
             count = send(cdata->csock, "07 15 02", strlen("07 15 02") + 1, 0); // Equipment is not in database.

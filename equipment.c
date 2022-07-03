@@ -7,19 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-
-//#include <sys/types.h>
 #include <sys/socket.h>
-//#include <arpa/inet.h>
-
-//int equipment_client[CLIENTS];
-
-//void usage(int argc, char **argv) { // inform how to use the program
-//    printf("clientUsage
-//: %s <server IP> <server PORT>\n", argv[0]);
-//    printf("Exemplo: %s 127.0.0.1 51511\n", argv[0]);
-//    exit(EXIT_FAILURE);
-//}
 
 int main(int argc, char **argv) {
     int s;
@@ -38,10 +26,6 @@ int main(int argc, char **argv) {
         clientUsage(argc, argv);
     }
 
-    // Populating equipment's id array
-    // -1 - don't have equipment
-    // 1 - have equipment
-    // 0 - is the owner of the id
     int i;
     for (i = 0; i < CLIENTS; i++) {
         equipment_client[i] = -1;
@@ -134,7 +118,7 @@ int main(int argc, char **argv) {
             }
         } else if (strcmp(recuperarIdMensagem(buf), "06") == 0) // request the information about some equipment
         {
-            int sourceId = getEquipmentIdWithPayload(auxBuf);
+            int sourceId = recuperarIdEquipamentoDestino(auxBuf);
             int targetId = getTargetId(payloadBuf);
             if (sourceId - 1 == equipment_id) {
                 printf("requested information\n");
@@ -149,7 +133,7 @@ int main(int argc, char **argv) {
 
         } else if (strcmp(recuperarIdMensagem(buf), "07") == 0) // message about some error in the request
         {
-            //int equipmentId = getEquipmentIdWithPayload(auxBuf);
+            //int equipmentId = recuperarIdEquipamentoDestino(auxBuf);
             int payload = getLastMessageId(payloadBuf);
 
             if (payload == 1) {
@@ -168,7 +152,7 @@ int main(int argc, char **argv) {
             }
         } else if (strcmp(recuperarIdMensagem(buf), "08") == 0) // server exit successful
         {
-            int aux_equipment_id = getEquipmentIdWithPayload(auxBuf);
+            int aux_equipment_id = recuperarIdEquipamentoDestino(auxBuf);
             //int payload = getLastMessageId(payloadBuf);
             if (aux_equipment_id == equipment_id) {
                 printf("Successful removal\n");
