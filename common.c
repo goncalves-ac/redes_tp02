@@ -181,7 +181,7 @@ float geradorLeituraAleatoria(int min, int max) {
 void broadcast(char *string, int unique_id, struct equipment_data *equipment, pthread_mutex_t lock) {
     pthread_mutex_lock(&lock);
     int i;
-    for (i = 0; i < CLIENTS; ++i) {
+    for (i = 0; i < MAXEQUIPMENT; ++i) {
         if (equipment[i].equipment_used != -1) {
             if (equipment[i].eq_sock != unique_id) {
                 char aux[100];
@@ -218,11 +218,11 @@ void *client_thread(void *data) {
     sprintf(payloadBuf, "%s", buf);
 
     if (strcmp(recuperarIdMensagem(buf), "01") == 0) {
-        if (countEquipment >= CLIENTS) {
+        if (countEquipment >= MAXEQUIPMENT) {
             count = send(cdata->csock, "07 15 04", strlen("07 15 04") + 1, 0);
         } else {
             int i;
-            for (i = 0; i < CLIENTS; i++) {
+            for (i = 0; i < MAXEQUIPMENT; i++) {
                 if (equipment[i].equipment_used == -1) {
                     equipment[i].equipment_used = 1;
                     char id[10];
@@ -265,14 +265,14 @@ void *client_thread(void *data) {
     } else if (strcmp(recuperarIdMensagem(buf), "05") == 0) {
         int auxSource = recuperarIdEquipamentoDestino(auxBuf);
         int auxTarget = recuperarIdUltimaMensagem(payloadBuf);
-        if ((auxSource - 1) >= CLIENTS || equipment[auxSource - 1].equipment_used == -1) {
+        if ((auxSource - 1) >= MAXEQUIPMENT || equipment[auxSource - 1].equipment_used == -1) {
             count = send(cdata->csock, "07 15 02", strlen("07 15 02") + 1, 0);
             if (auxSource < 10) {
                 printf("Equipment 0%d not found\n", auxSource);
             } else {
                 printf("Equipment %d not found\n", auxSource);
             }
-        } else if ((auxTarget - 1) >= CLIENTS || equipment[auxTarget - 1].equipment_used == -1) {
+        } else if ((auxTarget - 1) >= MAXEQUIPMENT || equipment[auxTarget - 1].equipment_used == -1) {
             count = send(cdata->csock, "07 15 03", strlen("07 15 03") + 1, 0);
             if (auxTarget < 10) {
                 printf("Equipment 0%d not found\n", auxTarget);
@@ -292,7 +292,7 @@ void *client_thread(void *data) {
         int equipment_id = recuperarIdUltimaMensagem(auxBuf);
         bzero(buf, 256);
         int i;
-        for (i = 0; i < CLIENTS; i++) {
+        for (i = 0; i < MAXEQUIPMENT; i++) {
             if (i != equipment_id && equipment[i].equipment_used == 1) {
                 char id[10];
                 if (i < 10) {

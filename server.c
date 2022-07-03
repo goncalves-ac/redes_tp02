@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     }
 
     int i;
-    for (i = 0; i < CLIENTS; i++) {
+    for (i = 0; i < MAXEQUIPMENT; i++) {
         equipment[i].equipment_used = -1;
         equipment[i].eq_sock = -1;
     }
