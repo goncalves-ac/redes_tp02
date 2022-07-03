@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 
     int i;
     for (i = 0; i < MAXEQUIPAMENTO; i++) {
-        vetorStructEquipamentos[i].equipment_used = -1;
+        vetorStructEquipamentos[i].equipamento_usado = -1;
         vetorStructEquipamentos[i].eq_sock = -1;
     }
 

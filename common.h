@@ -18,14 +18,14 @@ struct client_data {
 
 struct dadosEquipamento {
     int eq_sock;
-    int equipment_used;
+    int equipamento_usado;
 };
 
 struct dadosEquipamento vetorStructEquipamentos[MAXEQUIPAMENTO];
 
-int equipment_client[MAXEQUIPAMENTO];
+int vetorIntEquipamentos[MAXEQUIPAMENTO];
 
-int countEquipment;
+int numeroEquipamentos;
 
 pthread_mutex_t lock;
 

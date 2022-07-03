@@ -182,7 +182,7 @@ void broadcast(char *string, int unique_id, struct dadosEquipamento *equipment, 
     pthread_mutex_lock(&lock);
     int i;
     for (i = 0; i < MAXEQUIPAMENTO; ++i) {
-        if (equipment[i].equipment_used != -1) {
+        if (equipment[i].equipamento_usado != -1) {
             if (equipment[i].eq_sock != unique_id) {
                 char aux[100];
                 sprintf(aux, "%s", string);
@@ -218,13 +218,13 @@ void *client_thread(void *data) {
     sprintf(payloadBuf, "%s", buf);
 
     if (strcmp(recuperarIdMensagem(buf), "01") == 0) {
-        if (countEquipment >= MAXEQUIPAMENTO) {
+        if (numeroEquipamentos >= MAXEQUIPAMENTO) {
             count = send(cdata->csock, "07 15 04", strlen("07 15 04") + 1, 0);
         } else {
             int i;
             for (i = 0; i < MAXEQUIPAMENTO; i++) {
-                if (vetorStructEquipamentos[i].equipment_used == -1) {
-                    vetorStructEquipamentos[i].equipment_used = 1;
+                if (vetorStructEquipamentos[i].equipamento_usado == -1) {
+                    vetorStructEquipamentos[i].equipamento_usado = 1;
                     char id[10];
                     sprintf(id, "%d", i);
                     memccpy(memccpy(buf, "03 ", '\0', 20) - 1, id, '\0', 20);
@@ -239,14 +239,14 @@ void *client_thread(void *data) {
                     if (count != strlen(buf) + 1) {
                         logExit("send");
                     }
-                    countEquipment++;
+                    numeroEquipamentos++;
                     break;
                 }
             }
         }
     } else if (strcmp(recuperarIdMensagem(buf), "02") == 0) {
 
-        countEquipment--;
+        numeroEquipamentos--;
         int equipment_id = recuperarIdUltimaMensagem(auxBuf);
         sprintf(buf, "08 %d 01", equipment_id);
         if (equipment_id < 9) {
@@ -254,7 +254,7 @@ void *client_thread(void *data) {
         } else {
             printf("Equipment %d removed\n", equipment_id + 1);
         }
-        vetorStructEquipamentos[equipment_id].equipment_used = -1;
+        vetorStructEquipamentos[equipment_id].equipamento_usado = -1;
         vetorStructEquipamentos[equipment_id].eq_sock = -1;
         broadcast(buf, cdata->csock, vetorStructEquipamentos, lock);
         count = send(cdata->csock, buf, strlen(buf) + 1, 0);
@@ -265,14 +265,14 @@ void *client_thread(void *data) {
     } else if (strcmp(recuperarIdMensagem(buf), "05") == 0) {
         int auxSource = recuperarIdEquipamentoDestino(auxBuf);
         int auxTarget = recuperarIdUltimaMensagem(payloadBuf);
-        if ((auxSource - 1) >= MAXEQUIPAMENTO || vetorStructEquipamentos[auxSource - 1].equipment_used == -1) {
+        if ((auxSource - 1) >= MAXEQUIPAMENTO || vetorStructEquipamentos[auxSource - 1].equipamento_usado == -1) {
             count = send(cdata->csock, "07 15 02", strlen("07 15 02") + 1, 0);
             if (auxSource < 10) {
                 printf("Equipment 0%d not found\n", auxSource);
             } else {
                 printf("Equipment %d not found\n", auxSource);
             }
-        } else if ((auxTarget - 1) >= MAXEQUIPAMENTO || vetorStructEquipamentos[auxTarget - 1].equipment_used == -1) {
+        } else if ((auxTarget - 1) >= MAXEQUIPAMENTO || vetorStructEquipamentos[auxTarget - 1].equipamento_usado == -1) {
             count = send(cdata->csock, "07 15 03", strlen("07 15 03") + 1, 0);
             if (auxTarget < 10) {
                 printf("Equipment 0%d not found\n", auxTarget);
@@ -293,7 +293,7 @@ void *client_thread(void *data) {
         bzero(buf, 256);
         int i;
         for (i = 0; i < MAXEQUIPAMENTO; i++) {
-            if (i != equipment_id && vetorStructEquipamentos[i].equipment_used == 1) {
+            if (i != equipment_id && vetorStructEquipamentos[i].equipamento_usado == 1) {
                 char id[10];
                 if (i < 10) {
                     if (strlen(buf) <= 0) {

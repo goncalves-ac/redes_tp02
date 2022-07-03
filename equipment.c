@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 
     int i;
     for (i = 0; i < MAXEQUIPAMENTO; i++) {
-        equipment_client[i] = -1;
+        vetorIntEquipamentos[i] = -1;
     }
 
     for (;;) {
@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
         if (strcmp(recuperarIdMensagem(buf), "03") == 0) {
             if (equipment_id == -1) {
                 equipment_id = recuperarIdUltimaMensagem(auxBuf);
-                equipment_client[equipment_id] = 0;
+                vetorIntEquipamentos[equipment_id] = 0;
                 if (equipment_id < 10) {
                     printf("New ID: 0%d\n", equipment_id + 1);
                 } else {
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
                 }
             } else {
                 int aux_equipment_id = recuperarIdUltimaMensagem(auxBuf);
-                equipment_client[aux_equipment_id] = 1;
+                vetorIntEquipamentos[aux_equipment_id] = 1;
                 if (aux_equipment_id < 10) {
                     printf("Equipment 0%d added\n", aux_equipment_id + 1);
                 } else {
