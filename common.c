@@ -152,7 +152,7 @@ void printDataValue(char *string) {
     printf("%s\n", id);
 }
 
-int getTargetId(char *string) {
+int recuperarIdDestino(char *string) {
     // returns the device id on which to return the requested information 
     char *token = strtok(string, " "); // get the first token
     int id = -1;

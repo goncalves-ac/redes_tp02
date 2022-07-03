@@ -48,7 +48,7 @@ int recuperarIdEquipamentoDestino(char *string); // get equipment id with payloa
 
 int recuperarIdUltimaMensagem(char *string); // get last message id from string
 
-int getTargetId(char *string); // get target id from string
+int recuperarIdDestino(char *string); // get target id from string
 
 void printDataValue(char *string); // print data value from string
 

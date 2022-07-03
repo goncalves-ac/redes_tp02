@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
         } else if (strcmp(recuperarIdMensagem(buf), "06") == 0) // request the information about some equipment
         {
             int sourceId = recuperarIdEquipamentoDestino(auxBuf);
-            int targetId = getTargetId(payloadBuf);
+            int targetId = recuperarIdDestino(payloadBuf);
             if (sourceId - 1 == equipment_id) {
                 printf("requested information\n");
             } else {
