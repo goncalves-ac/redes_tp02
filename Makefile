@@ -1,4 +1,4 @@
 all:
-	gcc -Wall -c common.c
-	gcc -Wall -pthread equipment.c common.o -o equipment
-	gcc -Wall  server.c common.o -o server -lm
+	gcc -Wall -c common.c -lpthread
+	gcc -Wall equipment.c common.o -o equipment -lpthread
+	gcc -Wall server.c common.o -o server -lpthread
